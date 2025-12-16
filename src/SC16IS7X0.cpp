@@ -20,7 +20,7 @@
  * @param crystalClock Frequence in Hz of the XTAL1
  */
 SC16IS7X0::SC16IS7X0(uint32_t xtalFreq)
-    : _mcr(0x00), _lcr(0x03), _efr(0x00), _ioDir(0x00), _ioState(0x00),
+    : _mcr(0x00), _lcr(0x03), _efr(0x00), _ioDir(0x00), _ioState(0x00),_efcr(0x00),
       busIo(nullptr) {
   assert(xtalFreq > 0);
   _xtalFreq = xtalFreq;
@@ -673,4 +673,34 @@ int SC16IS7X0::digitalRead(uint8_t pin) {
   uint8_t data;
   busIo->write_then_read(request, 1, &data, 1);
   return data & (0x01 << pin) ? 1 : 0;
+}
+
+/**
+ * @brief Enable auto RS-485 mode
+ *
+ */
+void SC16IS7X0::enableAutors485(void) {
+  uint8_t request[2];
+
+  _efcr |= 0x03 << 4;
+
+  // Write MCR Register
+  request[0] = SC16IS7X0_EFCR << 3;
+  request[1] = _efcr;
+  busIo->write(request, 2);
+}
+
+/**
+ * @brief Disabel auto RS-485 mode
+ *
+ */
+void SC16IS7X0::disableAutors485(void) {
+  uint8_t request[2];
+
+  _efcr &= ~(0x03 << 4);
+
+  // Write MCR Register
+  request[0] = SC16IS7X0_EFCR << 3;
+  request[1] = _efcr;
+  busIo->write(request, 2); 
 }
