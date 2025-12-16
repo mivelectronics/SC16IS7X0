@@ -76,7 +76,7 @@
 
 #ifdef ESP32
 
-using SerialConfig = uint32_t;
+//using SerialConfig = uint32_t;
 
 #define UART_PARITY_MASK 0b00000011
 #define UART_NB_BIT_MASK 0b00001100
