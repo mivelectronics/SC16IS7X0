@@ -54,6 +54,12 @@ public:
   void digitalWrite(uint8_t pin, uint8_t val);
   int digitalRead(uint8_t pin);
 
+  void enableAutors485(void);
+  void disableAutors485(void);
+
+  void enableTCR_TLR(void);
+  void disableTCR_TLR(void);
+
 protected:
   Adafruit_SPIDevice *spi_dev = NULL; ///< Pointer to SPI bus interface
   enum Prescaler
@@ -66,8 +72,7 @@ private:
   void writeDivisorAndPrescaler(uint32_t divisor, Prescaler prescaler);
   void enableEnhancedFunctions(void);
   void enableFIFO(void);
-  void enableTCR_TLR(void);
-  void disableTCR_TLR(void);
+
   uint8_t txlvl(void);
   bool setBusIo(SC16IS7X0_BusIo *theBusIo);
 
@@ -75,9 +80,11 @@ private:
   static uint8_t getParity(SerialConfig config);
   static uint8_t getStopBits(SerialConfig config);
 
+  
   uint8_t _mcr;
   uint8_t _lcr;
   uint8_t _efr;
+  uint8_t _efcr;
   uint32_t _xtalFreq;
   uint8_t _ioDir;
   uint8_t _ioState;
